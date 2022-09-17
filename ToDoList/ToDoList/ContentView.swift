@@ -173,7 +173,6 @@ struct EditingButton: View {
 }
 
 struct deleteButton: View {
-    
     @Binding var selection: [Int]
     @EnvironmentObject var UserData: ToDo
     @Binding var editingMode: Bool
@@ -318,7 +317,6 @@ struct SingleCardView: View {
         .shadow(radius: 10, x: 0, y: 10)
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
