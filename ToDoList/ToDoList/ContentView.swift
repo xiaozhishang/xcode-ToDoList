@@ -169,7 +169,6 @@ struct EditingButton: View {
             Image(systemName: "gear")
                 .imageScale(.large)
         }
-        
     }
 }
 
@@ -191,7 +190,7 @@ struct deleteButton: View {
                 .imageScale(.large)
         }
         .alert(isPresented: self.$showDeleteAlert, content: {
-            Alert(title: Text("确定删除吗"),
+            Alert(title: Text("确定删除吗?"),
                   primaryButton: Alert.Button.default(Text("确定"), action: {
                     for i in self.selection {
                         self.UserData.delete(id: i)
