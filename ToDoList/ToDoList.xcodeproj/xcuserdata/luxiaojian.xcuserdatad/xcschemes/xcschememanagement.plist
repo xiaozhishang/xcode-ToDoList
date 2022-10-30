@@ -12,12 +12,35 @@
 		<key>extenExtension.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<key>time_widgetExtension.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>6EB6A61828D57E61006022B0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>73DADA3424BFF89D001E5B1F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>73DADA4A24BFF89F001E5B1F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>73DADA5524BFF89F001E5B1F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
