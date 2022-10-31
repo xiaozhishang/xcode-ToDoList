@@ -68,14 +68,15 @@ struct exterEntryView : View {
             case .systemSmall:  // 小号
                 Text(entry.date, style: .time)
             case .systemMedium: // 中号
-                Spacer()
+                
                 Text(Date().getCurrentDayStart(true), style: .timer)
-                    .font(.system(size: 75))
+                    .font(.system(size: 70))
                     .bold()
                     .shadow(radius: 10, x: 10, y: 10)
-                    .padding(.horizontal)
-                    .padding(.vertical)
-                Spacer()
+                    //.padding(.horizontal)
+                    //.padding(.vertical)
+                    .multilineTextAlignment(.center)
+                    //.background(.white)
             case .systemLarge:  // 大号
                 Text(entry.date, style: .time)
             case .systemExtraLarge:
