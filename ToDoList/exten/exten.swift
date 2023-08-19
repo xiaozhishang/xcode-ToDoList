@@ -107,7 +107,6 @@ extension Color {
 @main
 struct exter: Widget {
     let kind: String = "exter"
-
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             exterEntryView(entry: entry)
