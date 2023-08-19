@@ -55,28 +55,31 @@ struct SimpleEntry: TimelineEntry {
 // 实现一天内的计时器
 //Text(Date().getCurrentDayStart(true), style: .timer)
 
+
 struct exterEntryView : View {
     // 这句代码能从上下文环境中取到小组件的型号
         @Environment(\.widgetFamily) var family
         
         // 组件数据
         var entry: Provider.Entry
-
+    
+        @State  var currentSeconds: Int = 0
+         var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         // 这个 body 中就是自己需要实现的组件布局
         var body: some View {
             switch family {
             case .systemSmall:  // 小号
                 Text(entry.date, style: .time)
             case .systemMedium: // 中号
-                
+                 
                 Text(Date().getCurrentDayStart(true), style: .timer)
-                    .font(.system(size: 70))
-                    .bold()
-                    .shadow(radius: 10, x: 10, y: 10)
-                    //.padding(.horizontal)
-                    //.padding(.vertical)
-                    .multilineTextAlignment(.center)
-                    //.background(.white)
+                            .font(.system(size: 70))
+                            .bold()
+                            .shadow(radius: 10, x: 10, y: 10)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(Color(hex: 0xB03060))
+                            .italic()
+                            .underline(true,color: Color(hex: 0xDB7093))
             case .systemLarge:  // 大号
                 Text(entry.date, style: .time)
             case .systemExtraLarge:
@@ -93,6 +96,14 @@ struct exterEntryView : View {
         }
 }
 
+extension Color {
+    init(hex: UInt32) {
+        let red = Double((hex & 0xFF0000) >> 16) / 255.0
+        let green = Double((hex & 0x00FF00) >> 8) / 255.0
+        let blue = Double(hex & 0x0000FF) / 255.0
+        self.init(red: red, green: green, blue: blue)
+    }
+}
 @main
 struct exter: Widget {
     let kind: String = "exter"
