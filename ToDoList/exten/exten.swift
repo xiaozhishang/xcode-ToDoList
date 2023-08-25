@@ -71,15 +71,26 @@ struct exterEntryView : View {
             case .systemSmall:  // 小号
                 Text(entry.date, style: .time)
             case .systemMedium: // 中号
-                 
+                HStack(alignment: .center) {
+                    Image(systemName: "bolt.fill")
+                        .foregroundColor(.yellow)
+                        .font(.system(size: 25))
+                    //                                            .multilineTextAlignment(.trailing)
+                    //                        .alignmentGuide(.bottom, computeValue: { d in d[.bottom] - 5})
+                        .offset(x: 10, y: -30)
+                
                 Text(Date().getCurrentDayStart(true), style: .timer)
-                            .font(.system(size: 70))
-                            .bold()
-                            .shadow(radius: 10, x: 10, y: 10)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(Color(hex: 0xB03060))
-                            .italic()
-                            .underline(true,color: Color(hex: 0xDB7093))
+                    .font(.system(size: 65, design: .rounded))
+                    .bold()
+                    .shadow(radius: 10, x: 10, y: 10)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(hex: 0xB03060))
+                    .italic()
+                    .underline(true,color: Color(hex: 0xDB7093))
+                    .offset(x: -15, y: 0)
+            }
+                
+                
             case .systemLarge:  // 大号
                 Text(entry.date, style: .time)
             case .systemExtraLarge:
