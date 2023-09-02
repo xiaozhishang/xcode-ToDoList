@@ -71,11 +71,16 @@ struct exterEntryView : View {
             case .systemSmall:  // 小号
                 Text(entry.date, style: .time)
             case .systemMedium: // 中号
+                let stringArray = ["sun.min", "sun.and.horizon.circle.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill"]
+                // 随机取得其中的值
+                let randomIndex = Int.random(in: 0..<stringArray.count)
+                let randomString = stringArray[randomIndex]
+                
                 HStack(alignment: .center) {
-                    Image(systemName: "bolt.fill")
+                    Image(systemName: randomString)
                         .foregroundColor(.yellow)
                         .font(.system(size: 25))
-                        .offset(x: 15, y: -30)
+                        .offset(x: 8, y: -30)
 //                    Image(systemName: "sun.haze.fill")
 //                        .foregroundColor(.orange)
 //                        .font(.system(size: 20))
