@@ -72,6 +72,7 @@
 		6EB6A61F28D57E61006022B0 /* exten.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = exten.intentdefinition; sourceTree = "<group>"; };
 		6EB6A62028D57E62006022B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6EB6A62228D57E62006022B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6ED9A5432AA317AC001BD830 /* extenExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = extenExtension.entitlements; sourceTree = "<group>"; };
 		7300B88E24C041A900B8F111 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		7302DE4E24C147A800D8B537 /* EditingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingPage.swift; sourceTree = "<group>"; };
 		73DADA3524BFF89D001E5B1F /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,6 +148,7 @@
 		73DADA2C24BFF89D001E5B1F = {
 			isa = PBXGroup;
 			children = (
+				6ED9A5432AA317AC001BD830 /* extenExtension.entitlements */,
 				73DADA3724BFF89D001E5B1F /* ToDoList */,
 				73DADA4E24BFF89F001E5B1F /* ToDoListTests */,
 				73DADA5924BFF89F001E5B1F /* ToDoListUITests */,
@@ -444,6 +446,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = extenExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q9LLVN577Y;
@@ -461,6 +464,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.joe190.test3.exten;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -474,6 +478,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = extenExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q9LLVN577Y;
@@ -491,6 +496,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.joe190.test3.exten;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -661,7 +667,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9Y329994G5;
 				INFOPLIST_FILE = ToDoListTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -683,7 +689,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9Y329994G5;
 				INFOPLIST_FILE = ToDoListTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

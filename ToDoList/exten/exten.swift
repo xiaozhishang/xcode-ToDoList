@@ -71,7 +71,7 @@ struct exterEntryView : View {
             case .systemSmall:  // 小号
                 Text(entry.date, style: .time)
             case .systemMedium: // 中号
-                let stringArray = ["sun.min", "sun.and.horizon.circle.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill"]
+                let stringArray = ["sun.min", "sun.max.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill", "moon.stars.fill", "cloud.sun.bolt", "aqi.medium", "snowflake"]
                 // 随机取得其中的值
                 let randomIndex = Int.random(in: 0..<stringArray.count)
                 let randomString = stringArray[randomIndex]
@@ -81,6 +81,7 @@ struct exterEntryView : View {
                         .foregroundColor(.yellow)
                         .font(.system(size: 25))
                         .offset(x: 8, y: -30)
+//                        .symbolRenderingMode(.multicolor)
 //                    Image(systemName: "sun.haze.fill")
 //                        .foregroundColor(.orange)
 //                        .font(.system(size: 20))
