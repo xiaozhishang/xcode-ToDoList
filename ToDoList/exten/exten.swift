@@ -96,11 +96,11 @@ struct exterEntryView : View {
                 let randomIndex = Int.random(in: 0..<stringArray.count)
                 let randomString = stringArray[randomIndex]
                 
-                HStack(alignment: .center) {
+                VStack(alignment: .center) {
                     Image(systemName: randomString)
                         .foregroundColor(.yellow)
                         .font(.system(size: 15))
-                        .offset(x: 8, y: -30)
+//                        .offset(x: 8, y: -30)
                 
                 Text(Date().getCurrentDayStart(true), style: .timer)
                     .font(.system(size: 42, design: .rounded))
@@ -110,7 +110,7 @@ struct exterEntryView : View {
                     .foregroundColor(Color(hex: 0xB03060))
                     .italic()
                     .underline(true,color: Color(hex: 0xDB7093))
-                    .offset(x: -15, y: 0)
+//                    .offset(x: -15, y: 0)
                     .minimumScaleFactor(0.5) // 设置最小缩放比例
                     .lineLimit(1) // 设置
                     
@@ -127,7 +127,7 @@ struct exterEntryView : View {
                 HStack(alignment: .center) {
                     Image(systemName: randomString)
                         .foregroundColor(.yellow)
-                        .font(.system(size: 25))
+                        .font(.system(size: 23))
                         .offset(x: 8, y: -30)
 //                        .symbolRenderingMode(.multicolor)
 //                    Image(systemName: "sun.haze.fill")
@@ -195,7 +195,6 @@ struct exterEntryView : View {
             }
         }
 }
-
 extension Color {
     init(hex: UInt32) {
         let red = Double((hex & 0xFF0000) >> 16) / 255.0
