@@ -40,6 +40,7 @@ struct SimpleEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationIntent
 }
+
 //获取当天开始的日期，给Date增加一个拓展方法
  extension Date {
     func getCurrentDayStart(_ isDayOf24Hours: Bool)-> Date {
@@ -55,11 +56,32 @@ struct SimpleEntry: TimelineEntry {
 // 实现一天内的计时器
 //Text(Date().getCurrentDayStart(true), style: .timer)
 
+struct MyShapeStyle1: ShapeStyle {
+    func resolve(in environment: EnvironmentValues) -> some ShapeStyle {
+        if environment.colorScheme == .light {
+            return Color.red.blendMode(.lighten)
+        } else {
+            return Color.red.blendMode(.darken)
+        }
+    }
+}
+
+func myButton(title: String, imageName: String, action: @escaping () -> Void) -> some View {
+    Button(action: action) {
+        HStack {
+            Image(systemName: imageName)
+            Text(title)
+        }
+        .padding()
+        .foregroundColor(.white)
+        .background(Color.blue)
+        .cornerRadius(10)
+    }
+}
 
 struct exterEntryView : View {
-    // 这句代码能从上下文环境中取到小组件的型号
+        // 这句代码能从上下文环境中取到小组件的型号
         @Environment(\.widgetFamily) var family
-        
         // 组件数据
         var entry: Provider.Entry
     
@@ -69,7 +91,33 @@ struct exterEntryView : View {
         var body: some View {
             switch family {
             case .systemSmall:  // 小号
-                Text(entry.date, style: .time)
+                let stringArray = ["sun.min", "sun.max.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill", "moon.stars.fill", "cloud.sun.bolt", "aqi.medium", "snowflake"]
+                // 随机取得其中的值
+                let randomIndex = Int.random(in: 0..<stringArray.count)
+                let randomString = stringArray[randomIndex]
+                
+                HStack(alignment: .center) {
+                    Image(systemName: randomString)
+                        .foregroundColor(.yellow)
+                        .font(.system(size: 15))
+                        .offset(x: 8, y: -30)
+                
+                Text(Date().getCurrentDayStart(true), style: .timer)
+                    .font(.system(size: 42, design: .rounded))
+                    .bold()
+                    .shadow(radius: 10, x: 10, y: 10)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(hex: 0xB03060))
+                    .italic()
+                    .underline(true,color: Color(hex: 0xDB7093))
+                    .offset(x: -15, y: 0)
+                    .minimumScaleFactor(0.5) // 设置最小缩放比例
+                    .lineLimit(1) // 设置
+                    
+                }
+                .containerBackground(for: .widget){
+                }
+                
             case .systemMedium: // 中号
                 let stringArray = ["sun.min", "sun.max.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill", "moon.stars.fill", "cloud.sun.bolt", "aqi.medium", "snowflake"]
                 // 随机取得其中的值
@@ -88,7 +136,7 @@ struct exterEntryView : View {
 //                        .offset(x: 10, y: -30)
                 
                 Text(Date().getCurrentDayStart(true), style: .timer)
-                    .font(.system(size: 67, design: .rounded))
+                        .font(.system(size: 70, design: .rounded))
                     .bold()
                     .shadow(radius: 10, x: 10, y: 10)
                     .multilineTextAlignment(.center)
@@ -96,11 +144,44 @@ struct exterEntryView : View {
                     .italic()
                     .underline(true,color: Color(hex: 0xDB7093))
                     .offset(x: -15, y: 0)
-            }
-                
-                
+                    .minimumScaleFactor(0.5) // 设置最小缩放比例
+                    .lineLimit(1) // 设置
+//                    .frame(minWidth: 0,maxWidth: .infinity)
+                    
+                }
+//                .widgetBackground(Color.black)
+                .containerBackground(for: .widget){
+//                    Color.white.opacity(0.01)
+//                    Color.red.blendMode(.darken)
+                }
             case .systemLarge:  // 大号
-                Text(entry.date, style: .time)
+                let stringArray = ["sun.min", "sun.max.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill", "moon.stars.fill", "cloud.sun.bolt", "aqi.medium", "snowflake"]
+                // 随机取得其中的值
+                let randomIndex = Int.random(in: 0..<stringArray.count)
+                let randomString = stringArray[randomIndex]
+                
+                VStack(alignment: .center) {
+                    Image(systemName: randomString)
+                        .foregroundColor(.yellow)
+                        .font(.system(size: 40))
+                Text(Date().getCurrentDayStart(true), style: .timer)
+                    .font(.system(size: 80, design: .rounded))
+                    .bold()
+                    .shadow(radius: 10, x: 10, y: 10)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(hex: 0xB03060))
+                    .italic()
+                    .underline(true,color: Color(hex: 0xDB7093))
+                    .minimumScaleFactor(0.5) // 设置最小缩放比例
+                    .lineLimit(1) // 设置
+                    
+                    myButton(title: "Click me", imageName: "heart.fill") {
+                        print("Button clicked!")
+                    }
+                    
+                }
+                .containerBackground(for: .widget){
+                }
             case .systemExtraLarge:
                 Text(entry.date, style: .time)
             case .accessoryCircular:
@@ -123,6 +204,18 @@ extension Color {
         self.init(red: red, green: green, blue: blue)
     }
 }
+
+extension View {
+    func widgetBackground(_ backgroundView: some View) -> some View {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return containerBackground(for: .widget) {
+                backgroundView
+            }
+        } else {
+            return background(backgroundView)
+        }
+    }
+}
 @main
 struct exter: Widget {
     let kind: String = "exter"
@@ -130,8 +223,9 @@ struct exter: Widget {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             exterEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Time Widget")
+        .description("Tt is a time widget.")
+        .contentMarginsDisabled()
     }
 }
 
