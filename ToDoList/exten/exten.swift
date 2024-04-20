@@ -52,7 +52,7 @@ struct SimpleEntry: TimelineEntry {
         let min = calendar.component(.minute, from: self);
         let sec = calendar.component(.second, from: self);
     
-        let components = DateComponents(year: year, month: month, day: day, hour: 0, minute: 0, second: sec)
+        let components = DateComponents(year: year, month: month, day: day, hour: 0, minute: 0, second: 0)
         return Calendar.current.date(from: components)!
     }
 }
@@ -136,8 +136,8 @@ struct exterEntryView : View {
                 HStack(alignment: .center) {
                     Image(systemName: randomString)
                         .foregroundColor(.yellow)
-                        .font(.system(size: 23))
-                        .offset(x: 8, y: -30)
+                        .font(.system(size: 25))
+                        .offset(x: 8, y: -35)
                     Text(Date().getCurrentDayStart(false), style: .relative)
                         .font(.system(size: 70, design: .rounded))
                         .bold()
