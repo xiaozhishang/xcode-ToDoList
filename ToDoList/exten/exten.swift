@@ -48,8 +48,11 @@ struct SimpleEntry: TimelineEntry {
         let year = calendar.component(.year, from: self);
         let month = calendar.component(.month, from: self);
         let day = calendar.component(.day, from: self);
+        let hour = calendar.component(.hour, from: self);
+        let min = calendar.component(.minute, from: self);
+        let sec = calendar.component(.second, from: self);
     
-        let components = DateComponents(year: year, month: month, day: day, hour: 0, minute: 0, second: 0)
+        let components = DateComponents(year: year, month: month, day: day, hour: 0, minute: 0, second: sec)
         return Calendar.current.date(from: components)!
     }
 }
@@ -79,6 +82,12 @@ func myButton(title: String, imageName: String, action: @escaping () -> Void) ->
     }
 }
 
+func formatDate(date: Date) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm" // 这里指定日期格式，只包含小时和分钟
+    return dateFormatter.string(from: date)
+}
+
 struct exterEntryView : View {
         // 这句代码能从上下文环境中取到小组件的型号
         @Environment(\.widgetFamily) var family
@@ -102,7 +111,7 @@ struct exterEntryView : View {
                         .font(.system(size: 15))
 //                        .offset(x: 8, y: -30)
                 
-                Text(Date().getCurrentDayStart(true), style: .timer)
+                Text(Date().getCurrentDayStart(true), style: .offset)
                     .font(.system(size: 42, design: .rounded))
                     .bold()
                     .shadow(radius: 10, x: 10, y: 10)
@@ -123,33 +132,26 @@ struct exterEntryView : View {
                 // 随机取得其中的值
                 let randomIndex = Int.random(in: 0..<stringArray.count)
                 let randomString = stringArray[randomIndex]
-                
+ 
                 HStack(alignment: .center) {
                     Image(systemName: randomString)
                         .foregroundColor(.yellow)
                         .font(.system(size: 23))
                         .offset(x: 8, y: -30)
-//                        .symbolRenderingMode(.multicolor)
-//                    Image(systemName: "sun.haze.fill")
-//                        .foregroundColor(.orange)
-//                        .font(.system(size: 20))
-//                        .offset(x: 10, y: -30)
-                
-                Text(Date().getCurrentDayStart(true), style: .timer)
+                    Text(Date().getCurrentDayStart(false), style: .relative)
                         .font(.system(size: 70, design: .rounded))
-                    .bold()
-                    .shadow(radius: 10, x: 10, y: 10)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color(hex: 0xB03060))
-                    .italic()
-                    .underline(true,color: Color(hex: 0xDB7093))
-                    .offset(x: -15, y: 0)
-                    .minimumScaleFactor(0.5) // 设置最小缩放比例
-                    .lineLimit(1) // 设置
-//                    .frame(minWidth: 0,maxWidth: .infinity)
+                        .bold()
+                        .shadow(radius: 10, x: 10, y: 10)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color(hex: 0xB03060))
+                        .italic()
+                        .underline(true,color: Color(hex: 0xDB7093))
+                        .offset(x: -15, y: 0)
+                        .minimumScaleFactor(0.5) // 设置最小缩放比例
+                        .lineLimit(1) // 设置
+                        .environment(\.locale, Locale(identifier: "en_US_POSIX")) // 设置本地化环境
                     
                 }
-//                .widgetBackground(Color.black)
                 .containerBackground(for: .widget){
 //                    Color.white.opacity(0.01)
 //                    Color.red.blendMode(.darken)
@@ -164,7 +166,7 @@ struct exterEntryView : View {
                     Image(systemName: randomString)
                         .foregroundColor(.yellow)
                         .font(.system(size: 40))
-                Text(Date().getCurrentDayStart(true), style: .timer)
+                Text(Date().getCurrentDayStart(true), style: .date)
                     .font(.system(size: 80, design: .rounded))
                     .bold()
                     .shadow(radius: 10, x: 10, y: 10)
