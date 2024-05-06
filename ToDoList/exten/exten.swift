@@ -149,7 +149,8 @@ struct exterEntryView : View {
                         .offset(x: -15, y: 0)
                         .minimumScaleFactor(0.5) // 设置最小缩放比例
                         .lineLimit(1) // 设置
-                        .environment(\.locale, Locale(identifier: "en_US_POSIX")) // 设置本地化环境
+                        // 设置本地化环境
+                        .environment(\.locale, Locale(identifier: "en_US_POSIX"))
                     
                 }
                 .containerBackground(for: .widget){
