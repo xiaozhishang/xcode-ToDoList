@@ -96,23 +96,66 @@ struct exterEntryView : View {
     
         @State  var currentSeconds: Int = 0
          var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    // 计算当前时间对应的图标
+//        var timeBasedIcon: String {
+//            let hour = Calendar.current.component(.hour, from: Date())
+//            return (6..<18).contains(hour) ? "sun.max.fill" : "moon.fill"
+//        }
+      
+        let day_value = Calendar.current.component(.day, from: Date())
+    @State private var weekday = Calendar.current.component(.weekday, from: Date())
+        let weekdayNames = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
+    
+        // 随机图标（可选）
+        var randomIcon: String {
+            let icons = ["sun.min", "sun.max.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill", "moon.stars.fill", "cloud.sun.bolt", "aqi.medium", "snowflake"]
+            return icons.randomElement() ?? "sun.min"
+        }
+    
+    // 白天可选的图标数组
+        private let dayIcons = [
+            "sun.min",
+            "sun.max.fill",
+            "sun.max",
+            "sun.min.fill"
+        ]
+    
+    // 晚上可选的图标数组
+        private let nightIcons = [
+            "moon",
+            "moon.fill",
+            "moon.circle",
+            "moon.circle.fill",
+            "moon.dust",
+            "moon.stars",
+            "moon.stars.fill"
+        ]
+    
+    // 根据当前时间返回随机图标
+        private var timeBasedIcon: String {
+            let hour = Calendar.current.component(.hour, from: Date())
+            let isDaytime = (6..<18).contains(hour)
+            
+            if isDaytime {
+                return dayIcons.randomElement() ?? "sun.min" // 白天随机返回白天图标
+            } else {
+                return nightIcons.randomElement() ?? "moon" // 晚上随机返回夜晚图标
+            }
+        }
+         
         // 这个 body 中就是自己需要实现的组件布局
         var body: some View {
             switch family {
             case .systemSmall:  // 小号
-                let stringArray = ["sun.min", "sun.max.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill", "moon.stars.fill", "cloud.sun.bolt", "aqi.medium", "snowflake"]
-                // 随机取得其中的值
-                let randomIndex = Int.random(in: 0..<stringArray.count)
-                let randomString = stringArray[randomIndex]
-                
                 VStack(alignment: .center) {
-                    Image(systemName: randomString)
+                    Image(systemName: timeBasedIcon)
                         .foregroundColor(.yellow)
                         .font(.system(size: 15))
 //                        .offset(x: 8, y: -30)
                 
-                Text(Date().getCurrentDayStart(true), style: .offset)
-                    .font(.system(size: 42, design: .rounded))
+                    Text(Date().getCurrentDayStart(true), style: .relative)
+                    .font(.system(size: 70, design: .rounded))
                     .bold()
                     .shadow(radius: 10, x: 10, y: 10)
                     .multilineTextAlignment(.center)
@@ -121,42 +164,41 @@ struct exterEntryView : View {
                     .underline(true,color: Color(hex: 0xDB7093))
 //                    .offset(x: -15, y: 0)
                     .minimumScaleFactor(0.5) // 设置最小缩放比例
-                    .lineLimit(1) // 设置
+                    .lineLimit(2) // 设置
                     
                 }
                 .containerBackground(for: .widget){
                 }
                 
             case .systemMedium: // 中号
-                let stringArray = ["sun.min", "sun.max.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill", "moon.stars.fill", "cloud.sun.bolt", "aqi.medium", "snowflake"]
-                // 随机取得其中的值
-                let randomIndex = Int.random(in: 0..<stringArray.count)
-                let randomString = stringArray[randomIndex]
- 
                 HStack(alignment: .center) {
-                    Image(systemName: randomString)
+                    Image(systemName: timeBasedIcon)
                         .foregroundColor(.yellow)
                         .font(.system(size: 25))
                         .offset(x: 8, y: -35)
-                    Text(Date().getCurrentDayStart(false), style: .relative)
-                        .font(.system(size: 70, design: .rounded))
+                    Text(Date().getCurrentDayStart(false), style: .timer)
+                        .font(.system(size: 80, design: .rounded))
                         .bold()
                         .shadow(radius: 10, x: 10, y: 10)
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color(hex: 0xB03060))
                         .italic()
                         .underline(true,color: Color(hex: 0xDB7093))
-                        .offset(x: -15, y: 0)
-                        .minimumScaleFactor(0.5) // 设置最小缩放比例
+                        .offset(x: -15, y: 15)
                         .lineLimit(1) // 设置
-                        // 设置本地化环境
-                        .environment(\.locale, Locale(identifier: "en_US_POSIX"))
-                    
+                        .minimumScaleFactor(0.1) // 最小缩小比例
+//                        .environment(\.locale, Locale(identifier: "en_US_POSIX")) // 设置本地化环境
                 }
                 .containerBackground(for: .widget){
 //                    Color.white.opacity(0.01)
 //                    Color.red.blendMode(.darken)
                 }
+                Text("\(weekdayNames[weekday - 1])" + " \(day_value)")
+                    .font(.system(size: 25))
+                    .offset(x: 105, y: -95)
+                    .foregroundColor(Color(hex: 0xDB7093))
+                    .shadow(radius: 10, x: 10, y: 10)
+                    .bold()
             case .systemLarge:  // 大号
                 let stringArray = ["sun.min", "sun.max.fill", "moon.stars", "cloud.fog.fill", "bolt.fill", "cloud.bolt.fill", "sunrise.fill", "moon.stars.fill", "cloud.sun.bolt", "aqi.medium", "snowflake"]
                 // 随机取得其中的值
@@ -175,7 +217,7 @@ struct exterEntryView : View {
                     .foregroundColor(Color(hex: 0xB03060))
                     .italic()
                     .underline(true,color: Color(hex: 0xDB7093))
-                    .minimumScaleFactor(0.5) // 设置最小缩放比例
+                    .minimumScaleFactor(0.1) // 设置最小缩放比例
                     .lineLimit(1) // 设置
                     
                     myButton(title: "Click me", imageName: "heart.fill") {
@@ -187,6 +229,8 @@ struct exterEntryView : View {
                 }
             case .systemExtraLarge:
                 Text(entry.date, style: .time)
+                    .containerBackground(for: .widget){
+                    }
             case .accessoryCircular:
                 Text(entry.date, style: .time)
             case .accessoryRectangular:
