@@ -56,8 +56,6 @@ struct SimpleEntry: TimelineEntry {
         return Calendar.current.date(from: components)!
     }
 }
-// 实现一天内的计时器
-//Text(Date().getCurrentDayStart(true), style: .timer)
 
 struct MyShapeStyle1: ShapeStyle {
     func resolve(in environment: EnvironmentValues) -> some ShapeStyle {
@@ -96,12 +94,6 @@ struct exterEntryView : View {
     
         @State  var currentSeconds: Int = 0
          var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
-    // 计算当前时间对应的图标
-//        var timeBasedIcon: String {
-//            let hour = Calendar.current.component(.hour, from: Date())
-//            return (6..<18).contains(hour) ? "sun.max.fill" : "moon.fill"
-//        }
       
         let day_value = Calendar.current.component(.day, from: Date())
     @State private var weekday = Calendar.current.component(.weekday, from: Date())
@@ -152,7 +144,6 @@ struct exterEntryView : View {
                     Image(systemName: timeBasedIcon)
                         .foregroundColor(.yellow)
                         .font(.system(size: 15))
-//                        .offset(x: 8, y: -30)
                 
                     Text(Date().getCurrentDayStart(true), style: .relative)
                     .font(.system(size: 70, design: .rounded))
