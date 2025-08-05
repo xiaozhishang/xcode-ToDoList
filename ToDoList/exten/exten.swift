@@ -93,10 +93,9 @@ struct exterEntryView : View {
         var entry: Provider.Entry
     
         @State  var currentSeconds: Int = 0
-         var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-      
+        var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         let day_value = Calendar.current.component(.day, from: Date())
-    @State private var weekday = Calendar.current.component(.weekday, from: Date())
+        @State private var weekday = Calendar.current.component(.weekday, from: Date())
         let weekdayNames = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
     
         // 随机图标（可选）
@@ -144,7 +143,6 @@ struct exterEntryView : View {
                     Image(systemName: timeBasedIcon)
                         .foregroundColor(.yellow)
                         .font(.system(size: 15))
-                
                     Text(Date().getCurrentDayStart(true), style: .relative)
                     .font(.system(size: 70, design: .rounded))
                     .bold()
@@ -153,10 +151,8 @@ struct exterEntryView : View {
                     .foregroundColor(Color(hex: 0xB03060))
                     .italic()
                     .underline(true,color: Color(hex: 0xDB7093))
-//                    .offset(x: -15, y: 0)
                     .minimumScaleFactor(0.5) // 设置最小缩放比例
                     .lineLimit(2) // 设置
-                    
                 }
                 .containerBackground(for: .widget){
                 }
@@ -181,8 +177,6 @@ struct exterEntryView : View {
 //                        .environment(\.locale, Locale(identifier: "en_US_POSIX")) // 设置本地化环境
                 }
                 .containerBackground(for: .widget){
-//                    Color.white.opacity(0.01)
-//                    Color.red.blendMode(.darken)
                 }
                 Text("\(weekdayNames[weekday - 1])" + " \(day_value)")
                     .font(.system(size: 25))
@@ -214,7 +208,6 @@ struct exterEntryView : View {
                     myButton(title: "Click me", imageName: "heart.fill") {
                         print("Button clicked!")
                     }
-                    
                 }
                 .containerBackground(for: .widget){
                 }
