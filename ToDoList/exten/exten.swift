@@ -142,9 +142,9 @@ struct exterEntryView : View {
                 VStack(alignment: .center) {
                     Image(systemName: timeBasedIcon)
                         .foregroundColor(.yellow)
-                        .font(.system(size: 15))
-                    Text(Date().getCurrentDayStart(true), style: .relative)
-                    .font(.system(size: 70, design: .rounded))
+                        .font(.system(size: 25))
+                    Text(Date().getCurrentDayStart(true), style: .timer)
+                    .font(.system(size: 35, design: .rounded))
                     .bold()
                     .shadow(radius: 10, x: 10, y: 10)
                     .multilineTextAlignment(.center)
