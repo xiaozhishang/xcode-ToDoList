@@ -12,11 +12,13 @@ import Intents
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent())
+        let sunTimes = calculateSunTimes(for: Date())
+        return SimpleEntry(date: Date(), configuration: ConfigurationIntent(), sunrise: sunTimes.sunrise, sunset: sunTimes.sunset)
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), configuration: configuration)
+        let sunTimes = calculateSunTimes(for: Date())
+        let entry = SimpleEntry(date: Date(), configuration: configuration, sunrise: sunTimes.sunrise, sunset: sunTimes.sunset)
         completion(entry)
     }
 
@@ -25,20 +27,28 @@ struct Provider: IntentTimelineProvider {
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
+        let sunTimes = calculateSunTimes(for: currentDate)
+
+        let sunrise = sunTimes.sunrise
+        let sunset = sunTimes.sunset
+        
         for hourOffset in 0 ..< 5 {
             let entryDate = Calendar.current.date(byAdding: .second, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
+            let entry = SimpleEntry(date: entryDate, configuration: configuration, sunrise: sunrise, sunset: sunset)
             entries.append(entry)
         }
 
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
+        
     }
 }
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationIntent
+    let sunrise: String
+    let sunset: String
 }
 
 //获取当天开始的日期，给Date增加一个拓展方法
@@ -85,6 +95,95 @@ func formatDate(date: Date) -> String {
     dateFormatter.dateFormat = "HH:mm" // 这里指定日期格式，只包含小时和分钟
     return dateFormatter.string(from: date)
 }
+
+private func calculateSunTimes(for date: Date) -> (sunrise: String, sunset: String) {
+
+    // 常州经纬度
+    let latitude = 31.8107
+    let longitude = 119.9737
+
+    // 中国标准时间 UTC+8
+    let timeZoneOffset = 8.0
+
+    let calendar = Calendar(identifier: .gregorian)
+    let dayOfYear = calendar.ordinality(
+        of: .day,
+        in: .year,
+        for: date
+    ) ?? 1
+
+    // 一天的角度
+    let gamma = 2.0 * Double.pi / 365.0 *
+        Double(dayOfYear - 1)
+
+    // 时间方程
+    let equationOfTime =
+        229.18 * (
+            0.000075
+            + 0.001868 * cos(gamma)
+            - 0.032077 * sin(gamma)
+            - 0.014615 * cos(2 * gamma)
+            - 0.040849 * sin(2 * gamma)
+        )
+
+    // 太阳赤纬
+    let solarDeclination =
+        0.006918
+        - 0.399912 * cos(gamma)
+        + 0.070257 * sin(gamma)
+        - 0.006758 * cos(2 * gamma)
+        + 0.000907 * sin(2 * gamma)
+        - 0.002697 * cos(3 * gamma)
+        + 0.00148 * sin(3 * gamma)
+
+    let latitudeRadians = latitude * Double.pi / 180.0
+
+    // 日出/日落时太阳中心的天顶角
+    let zenith = 90.833 * Double.pi / 180.0
+
+    let cosHourAngle =
+        (
+            cos(zenith)
+            / (cos(latitudeRadians) * cos(solarDeclination))
+        )
+        - tan(latitudeRadians) * tan(solarDeclination)
+
+    let hourAngle = acos(cosHourAngle) * 180.0 / Double.pi
+
+    // UTC 分钟数
+    let sunriseUTC =
+        720.0
+        - 4.0 * (longitude + hourAngle)
+        - equationOfTime
+
+    let sunsetUTC =
+        720.0
+        - 4.0 * (longitude - hourAngle)
+        - equationOfTime
+
+    // 转换成北京时间
+    let sunriseMinutes = sunriseUTC + timeZoneOffset * 60.0
+    let sunsetMinutes = sunsetUTC + timeZoneOffset * 60.0
+
+    func formatTime(_ minutes: Double) -> String {
+
+        var totalMinutes = Int(minutes.rounded())
+
+        // 防止跨天
+        totalMinutes = ((totalMinutes % 1440) + 1440) % 1440
+
+        let hour = totalMinutes / 60
+        let minute = totalMinutes % 60
+
+        return String(format: "%02d:%02d", hour, minute)
+    }
+
+    return (
+        sunrise: formatTime(sunriseMinutes),
+        sunset: formatTime(sunsetMinutes)
+    )
+}
+
 
 struct exterEntryView : View {
         // 这句代码能从上下文环境中取到小组件的型号
@@ -159,10 +258,29 @@ struct exterEntryView : View {
                 
             case .systemMedium: // 中号
                 HStack(alignment: .center) {
-                    Image(systemName: timeBasedIcon)
-                        .foregroundColor(.yellow)
-                        .font(.system(size: 25))
-                        .offset(x: 8, y: -35)
+//                    Image(systemName: timeBasedIcon)
+//                        .foregroundColor(.yellow)
+//                        .font(.system(size: 25))
+//                        .offset(x: 8, y: -35)
+                    VStack() {
+                        HStack() {
+                            Image(systemName: "sunrise.fill")
+                                .foregroundColor(.yellow)
+                            Text(entry.sunrise)
+                                .foregroundColor(Color(hex: 0xDB7093))
+                                .shadow(radius: 10, x: 10, y: 10)
+                        }
+                        HStack() {
+                            Image(systemName: "moon.stars.fill")
+                                .foregroundColor(.yellow)
+                            Text(entry.sunset)
+                                .foregroundColor(Color(hex: 0xDB7093))
+                                .shadow(radius: 10, x: 10, y: 10)
+                                .offset(x: 4)
+                        }
+                        
+                    }.offset(x: 8, y: -35)
+                    
                     Text(Date().getCurrentDayStart(false), style: .timer)
                         .font(.system(size: 80, design: .rounded))
                         .bold()
@@ -171,7 +289,7 @@ struct exterEntryView : View {
                         .foregroundColor(Color(hex: 0xB03060))
                         .italic()
                         .underline(true,color: Color(hex: 0xDB7093))
-                        .offset(x: -15, y: 15)
+                        .offset(x: -35, y: 15)
                         .lineLimit(1) // 设置
                         .minimumScaleFactor(0.1) // 最小缩小比例
 //                        .environment(\.locale, Locale(identifier: "en_US_POSIX")) // 设置本地化环境
@@ -261,7 +379,8 @@ struct exter: Widget {
 
 struct exter_Previews: PreviewProvider {
     static var previews: some View {
-        exterEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+        let sunTimes = calculateSunTimes(for: Date())
+        exterEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent(), sunrise: sunTimes.sunrise, sunset: sunTimes.sunset))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
